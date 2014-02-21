@@ -4,28 +4,28 @@ var fs = require("fs"),
 
 exports["test object"] = function () {
     var json = '{"foo": "bar"}';
-    assert.deepEqual(parser.parse(json), {"foo": "bar"});
+    assert.deepEqual(parser.parse(json), {"parsedObject":{"foo":"bar"},"lineIndex":{"foo":1}});
 };
 
 exports["test escaped backslash"] = function () {
     var json = '{"foo": "\\\\"}';
-    assert.deepEqual(parser.parse(json), {"foo": "\\"});
+    assert.deepEqual(parser.parse(json), {"parsedObject":{"foo":"\\"},"lineIndex":{"foo":1}});
 };
 
 exports["test escaped chars"] = function () {
     var json = '{"foo": "\\\\\\\""}';
-    assert.deepEqual(parser.parse(json), {"foo": '\\\"'});
+    assert.deepEqual(parser.parse(json), {"parsedObject":{"foo":"\\\""},"lineIndex":{"foo":1}});
 };
 
 exports["test escaped \\n"] = function () {
     var json = '{"foo": "\\\\\\n"}';
-    assert.deepEqual(parser.parse(json), {"foo": '\\\n'});
+    assert.deepEqual(parser.parse(json), {"parsedObject":{"foo": '\\\n'},"lineIndex":{"foo":1}});
 };
 
 exports["test string with escaped line break"] = function () {
     var json = '{"foo": "bar\\nbar"}';
-    assert.deepEqual(parser.parse(json), {"foo": "bar\nbar"});
-    assert.equal(JSON.stringify(parser.parse(json)).length, 18);
+    assert.deepEqual(parser.parse(json), {"parsedObject":{"foo": "bar\nbar"},"lineIndex":{"foo":1}});
+    assert.equal(JSON.stringify(parser.parse(json)).length, 57);
 };
 
 exports["test string with line break"] = function () {
@@ -35,22 +35,22 @@ exports["test string with line break"] = function () {
 
 exports["test string literal"] = function () {
     var json = '"foo"';
-    assert.equal(parser.parse(json), "foo");
+    assert.deepEqual(parser.parse(json), {"parsedObject":"foo","lineIndex":{}});
 };
 
 exports["test number literal"] = function () {
     var json = '1234';
-    assert.equal(parser.parse(json), 1234);
+    assert.deepEqual(parser.parse(json), {"parsedObject":1234,"lineIndex":{}});
 };
 
 exports["test null literal"] = function () {
     var json = '1234';
-    assert.equal(parser.parse(json), 1234);
+    assert.deepEqual(parser.parse(json), {"parsedObject":1234,"lineIndex":{}});
 };
 
 exports["test boolean literal"] = function () {
     var json = 'true';
-    assert.equal(parser.parse(json), true);
+    assert.deepEqual(parser.parse(json), {"parsedObject":true,"lineIndex":{}});
 };
 
 exports["test unclosed array"] = function () {
